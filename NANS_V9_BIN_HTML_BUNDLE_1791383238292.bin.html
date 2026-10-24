@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NANS V9 BUNDLE RUNNER - STANDALONE BIN_HTML</title>
+  <style>
+    :root {
+      --bg: #090402;
+      --card: #150904;
+      --orange: #f97316;
+      --orange-glow: rgba(249, 115, 22, 0.4);
+      --cyan: #38bdf8;
+      --text: #fed7aa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .hud-header {
+      border: 2px solid var(--orange);
+      box-shadow: 0 0 30px var(--orange-glow);
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      background: linear-gradient(180deg, #1f0b04 0%, #0d0402 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .hud-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      background: rgba(249, 115, 22, 0.2);
+      border: 1px solid var(--orange);
+      color: var(--orange);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .messages-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .bubble {
+      background: var(--card);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      padding: 16px 20px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .bubble.user {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: #081520;
+    }
+    .bubble-author {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .bubble.user .bubble-author {
+      color: var(--cyan);
+    }
+    .bubble-content {
+      color: #fff;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+    .image-preview {
+      margin-top: 12px;
+      border: 2px solid var(--orange);
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 480px;
+    }
+    .image-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .run-box {
+      margin-top: 24px;
+      padding: 16px;
+      background: #110502;
+      border: 1px dashed var(--orange);
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+    }
+    .run-input {
+      flex: 1;
+      background: #050100;
+      border: 1px solid var(--orange);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+    .run-btn {
+      background: var(--orange);
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .run-btn:hover { background: #ea580c; }
+  </style>
+</head>
+<body>
+  <div class="hud-header">
+    <div class="hud-title">
+      <span>⚡ MILYES-IA V9 NANS // STANDALONE BIN_HTML</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <span class="badge">OFFLINE RUNNER</span>
+      <span class="badge">Z-CORE SECURE</span>
+    </div>
+  </div>
+
+  <div class="messages-container" id="stream">
+    <!-- Messages injected by binary builder -->
+  </div>
+
+  <div style="max-width: 900px; margin: 24px auto 0;">
+    <div class="run-box">
+      <input type="text" id="userInput" class="run-input" placeholder="Directive locale de test..." />
+      <button class="run-btn" onclick="executeLocalPrompt()">EXÉCUTER</button>
+    </div>
+  </div>
+
+  <script>
+    const INITIAL_PAYLOAD = [];
+    const container = document.getElementById('stream');
+
+    function renderMessages(msgs) {
+      container.innerHTML = '';
+      msgs.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'bubble ' + (m.role === 'user' ? 'user' : 'model');
+        const author = document.createElement('div');
+        author.className = 'bubble-author';
+        author.textContent = m.role === 'user' ? 'OPÉRATEUR' : 'MILYES-IA V9 NANS CORE';
+        const content = document.createElement('div');
+        content.className = 'bubble-content';
+        content.textContent = m.content;
+        div.appendChild(author);
+        div.appendChild(content);
+
+        if (m.generatedImage && m.generatedImage.url) {
+          const imgWrap = document.createElement('div');
+          imgWrap.className = 'image-preview';
+          const img = document.createElement('img');
+          img.src = m.generatedImage.url;
+          imgWrap.appendChild(img);
+          div.appendChild(imgWrap);
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    function executeLocalPrompt() {
+      const input = document.getElementById('userInput');
+      const val = input.value.trim();
+      if (!val) return;
+      INITIAL_PAYLOAD.push({ role: 'user', content: val });
+      INITIAL_PAYLOAD.push({ 
+        role: 'model', 
+        content: '[RÉPONSE ÉMULATION LOCALE BIN_HTML]\nExécution autonome certifiée NANS V9 : directive ' + val + ' enregistrée dans le buffer quantique local.' 
+      });
+      input.value = '';
+      renderMessages(INITIAL_PAYLOAD);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    renderMessages(INITIAL_PAYLOAD);
+  </script>
+</body>
+</html>

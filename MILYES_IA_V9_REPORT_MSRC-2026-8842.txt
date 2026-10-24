@@ -1,0 +1,28 @@
+================================================
+NETSECUREPRO IA JURIDIQUE - ATTESTATION & RAPPORT
+================================================
+Licence: NSP-LAW-AI-2026-9942-CERT
+Système: MILYES-IA V9 NANS CORE
+Conformité: CERTIFIÉ & CONFORME RGPD / EU AI ACT
+
+CAS: MSRC-2026-8842
+TITRE: Azure AI Search index vector disclosure via cross-tenant prompt injection
+SEVERITY: High (CVSS 8.4)
+STATUT: Review / Repro
+
+SYNTHÈSE:
+Direct prompt injection in Azure AI Search semantic ranker allows unauthorized cross-tenant document summary retrieval.
+
+REMÉDIATION:
+Enforce strictly isolated query context boundaries before semantic re-ranking.
+================================================
+
+
+
+
+
+
+ cd /data/data/com.termux/files/home/zcore-h202-firewall && ls -F
+
+
+
